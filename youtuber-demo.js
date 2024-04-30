@@ -67,6 +67,17 @@ app.post('/youtubers', (req, res) => {
     });
 });
 
+app.delete('/youtubers', (req, res) => {
+    var msg = '';
+    if (db.size) {
+        db.clear();
+        msg = '전체 유튜버가 삭제되었습니다.'
+    } else {
+        msg = '삭제할 유튜버가 없습니다.'
+    }
+    res.json({message : msg});
+});
+
 app.delete('/youtubers/:id', (req, res) => {
     let id = parseInt(req.params.id);
 
