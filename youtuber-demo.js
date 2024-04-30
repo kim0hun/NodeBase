@@ -35,7 +35,7 @@ app.get('/youtubers', (req, res) => {
     // res.json(Object.fromEntries(db));
 
     var youtubers = {};
-    db.forEach(function(value, key){
+    db.forEach(function (value, key) {
         youtubers[key] = value;
     });
 
@@ -65,4 +65,21 @@ app.post('/youtubers', (req, res) => {
     res.json({
         message: `${db.get(id - 1).channelTitle}님, 유튜버 생활을 응원합니다!`
     });
-})
+});
+
+app.delete('/youtubers/:id', (req, res) => {
+    let id = parseInt(req.params.id);
+
+    var youtuber = db.get(id);
+    if (youtuber === undefined) {
+        res.json({
+            message: `요청하신${d}번은 없는 유튜버입니다.`
+        });
+    } else {
+        const channelTitle = youtuber.channelTitle;
+        db.delete(id);
+        res.json({
+            message: `${channelTitle}님, 아쉽지만 우리 인연은 여기까지 인가요...`
+        });
+    }
+});
