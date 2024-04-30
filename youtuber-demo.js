@@ -32,7 +32,15 @@ db.set(id++, youtuber3);
 // REST API 설계
 
 app.get('/youtubers', (req, res) => {
-    res.json(Object.fromEntries(db));
+    // res.json(Object.fromEntries(db));
+
+    var youtubers = {};
+    db.forEach(function(value, key){
+        youtubers[key] = value;
+    });
+
+    res.json(youtubers);
+
 });
 
 app.get('/youtubers/:id', (req, res) => {
