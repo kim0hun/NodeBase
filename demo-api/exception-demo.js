@@ -22,7 +22,7 @@ app.get('/fruits/:id', (req, res)=>{
     if(findFruit)
         res.json(findFruit);
     else
-        res.status(404).send(
-            '전달주신 id로 저장된 과일이 없습니다.'
+        res.status(200).send(
+            {message : '전달주신 id로 저장된 과일이 없습니다.'}
         );
 });
