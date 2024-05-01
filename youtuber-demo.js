@@ -1,25 +1,25 @@
-// express ëª¨ë“ˆ ì„¸íŒ…
+// express ¸ğµâ ¼¼ÆÃ
 const express = require('express');
 const app = express();
 app.listen(3000);
 
-// ë°ì´í„° ì„¸íŒ…
+// µ¥ÀÌÅÍ ¼¼ÆÃ
 let youtuber1 = {
-    channelTitle: "ì‹­ì˜¤ì•¼",
-    sub: "593ë§Œëª…",
-    videoNum: "993ê°œ"
+    channelTitle: "½Ê¿À¾ß",
+    sub: "593¸¸¸í",
+    videoNum: "993°³"
 }
 
 let youtuber2 = {
-    channelTitle: "ì¹¨ì°©ë§¨",
-    sub: "227ë§Œëª…",
-    videoNum: "6.6ì²œê°œ"
+    channelTitle: "Ä§Âø¸Ç",
+    sub: "227¸¸¸í",
+    videoNum: "6.6Ãµ°³"
 }
 
 let youtuber3 = {
-    channelTitle: "í…Œì˜¤",
-    sub: "54.8ë§Œëª…",
-    videoNum: "726ê°œ"
+    channelTitle: "Å×¿À",
+    sub: "54.8¸¸¸í",
+    videoNum: "726°³"
 }
 
 let db = new Map();
@@ -29,7 +29,7 @@ db.set(id++, youtuber1);
 db.set(id++, youtuber2);
 db.set(id++, youtuber3);
 
-// REST API ì„¤ê³„
+// REST API ¼³°è
 
 app.get('/youtubers', (req, res) => {
     // res.json(Object.fromEntries(db));
@@ -47,12 +47,12 @@ app.get('/youtubers/:id', (req, res) => {
     let id = parseInt(req.params.id);
 
     const youtuber = db.get(id);
-    if (youtuber === undefined) {
-        res.json({
-            message: "ìœ íŠœë²„ ì •ë³´ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
-        })
-    } else {
+    if (youtuber) {
         res.json(youtuber);
+    } else {
+        res.json({
+            message: "À¯Æ©¹ö Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù."
+        });
     }
 });
 
@@ -63,7 +63,7 @@ app.post('/youtubers', (req, res) => {
     db.set(id++, req.body);
 
     res.json({
-        message: `${db.get(id - 1).channelTitle}ë‹˜, ìœ íŠœë²„ ìƒí™œì„ ì‘ì›í•©ë‹ˆë‹¤!`
+        message: `${db.get(id - 1).channelTitle}´Ô, À¯Æ©¹ö »ıÈ°À» ÀÀ¿øÇÕ´Ï´Ù!`
     });
 });
 
@@ -71,9 +71,9 @@ app.delete('/youtubers', (req, res) => {
     var msg = '';
     if (db.size) {
         db.clear();
-        msg = 'ì „ì²´ ìœ íŠœë²„ê°€ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.'
+        msg = 'ÀüÃ¼ À¯Æ©¹ö°¡ »èÁ¦µÇ¾ú½À´Ï´Ù.'
     } else {
-        msg = 'ì‚­ì œí•  ìœ íŠœë²„ê°€ ì—†ìŠµë‹ˆë‹¤.'
+        msg = '»èÁ¦ÇÒ À¯Æ©¹ö°¡ ¾ø½À´Ï´Ù.'
     }
     res.json({ message: msg });
 });
@@ -82,15 +82,15 @@ app.delete('/youtubers/:id', (req, res) => {
     let id = parseInt(req.params.id);
 
     var youtuber = db.get(id);
-    if (youtuber === undefined) {
-        res.json({
-            message: `ìš”ì²­í•˜ì‹ ${d}ë²ˆì€ ì—†ëŠ” ìœ íŠœë²„ì…ë‹ˆë‹¤.`
-        });
-    } else {
+    if (youtuber) {
         const channelTitle = youtuber.channelTitle;
         db.delete(id);
         res.json({
-            message: `${channelTitle}ë‹˜, ì•„ì‰½ì§€ë§Œ ìš°ë¦¬ ì¸ì—°ì€ ì—¬ê¸°ê¹Œì§€ ì¸ê°€ìš”...`
+            message: `${channelTitle}´Ô, ¾Æ½±Áö¸¸ ¿ì¸® ÀÎ¿¬Àº ¿©±â±îÁö ÀÎ°¡¿ä...`
+        });
+    } else {
+        res.json({
+            message: `¿äÃ»ÇÏ½Å${d}¹øÀº ¾ø´Â À¯Æ©¹öÀÔ´Ï´Ù.`
         });
     }
 });
@@ -101,14 +101,14 @@ app.put('/youtubers/:id', (req, res) => {
     var oldTitle = youtuber.channelTitle;
     if (youtuber === undefined) {
         res.json({
-            message: `ìš”ì²­í•˜ì‹ ${d}ë²ˆì€ ì—†ëŠ” ìœ íŠœë²„ì…ë‹ˆë‹¤.`
+            message: `¿äÃ»ÇÏ½Å${d}¹øÀº ¾ø´Â À¯Æ©¹öÀÔ´Ï´Ù.`
         });
     } else {
         youtuber.channelTitle = req.body.channelTitle;
         db.set(id, youtuber);
 
         res.json({
-            message: `${oldTitle}ë‹˜, ì±„ë„ëª…ì´ ${youtuber.channelTitle}ë¡œ ìˆ˜ì •ë˜ì—ˆìŠµë‹ˆë‹¤.`
+            message: `${oldTitle}´Ô, Ã¤³Î¸íÀÌ ${youtuber.channelTitle}·Î ¼öÁ¤µÇ¾ú½À´Ï´Ù.`
         });
     }
 });
