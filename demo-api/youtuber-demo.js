@@ -35,11 +35,18 @@ app.get('/youtubers', (req, res) => {
     // res.json(Object.fromEntries(db));
 
     var youtubers = {};
-    db.forEach(function (value, key) {
-        youtubers[key] = value;
-    });
 
-    res.json(youtubers);
+    if (db.size !== 0) {
+        db.forEach(function (value, key) {
+            youtubers[key] = value;
+        });
+
+        res.json(youtubers);
+    } else {
+        res.status(404).json({
+            message: '조회할 유튜버가 없습니다.'
+        });
+    }
 
 });
 
@@ -50,33 +57,29 @@ app.get('/youtubers/:id', (req, res) => {
     if (youtuber) {
         res.json(youtuber);
     } else {
-        res.json({
+        res.status(404).json({
             message: "유튜버 정보를 찾을 수 없습니다."
         });
     }
 });
 
+
 app.use(express.json());
 app.post('/youtubers', (req, res) => {
-    console.log(req.body);
+    const channelTitle = req.body.channelTitle;
+    if(channelTitle){
+        db.set(id++, req.body);
 
-    db.set(id++, req.body);
-
-    res.json({
-        message: `${db.get(id - 1).channelTitle}님, 유튜버 생활을 응원합니다!`
-    });
-});
-
-app.delete('/youtubers', (req, res) => {
-    var msg = '';
-    if (db.size) {
-        db.clear();
-        msg = '전체 유튜버가 삭제되었습니다.'
-    } else {
-        msg = '삭제할 유튜버가 없습니다.'
+        res.status(201).json({
+            message: `${db.get(id - 1).channelTitle}님, 유튜버 생활을 응원합니다!`
+        });
+    }else{
+        res.status(400).json({
+            message : "요청 값을 제대로 보내주세요."
+        });
     }
-    res.json({ message: msg });
 });
+
 
 app.delete('/youtubers/:id', (req, res) => {
     let id = parseInt(req.params.id);
@@ -89,18 +92,36 @@ app.delete('/youtubers/:id', (req, res) => {
             message: `${channelTitle}님, 아쉽지만 우리 인연은 여기까지 인가요...`
         });
     } else {
-        res.json({
+        res.status(404).json({
             message: `요청하신${d}번은 없는 유튜버입니다.`
         });
     }
 });
+
+app.delete('/youtubers', (req, res) => {
+
+    if (db.size) {
+        db.clear();
+        res.json({
+            message: '전체 유튜버가 삭제되었습니다.'
+        });
+    } else {
+        res.status(404).json({
+            message: '삭제할 유튜버가 없습니다.'
+        });
+    }
+
+});
+
+
+
 
 app.put('/youtubers/:id', (req, res) => {
     let id = parseInt(req.params.id);
     var youtuber = db.get(id);
     var oldTitle = youtuber.channelTitle;
     if (youtuber === undefined) {
-        res.json({
+        res.status(404).json({
             message: `요청하신${d}번은 없는 유튜버입니다.`
         });
     } else {
