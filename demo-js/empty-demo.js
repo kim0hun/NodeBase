@@ -12,7 +12,7 @@ console.log(Object.keys(str1).length === 0, isEmpty(str1));
 console.log(Object.keys(str2).length === 0, isEmpty(str2));
 
 function isEmpty(obj) {
-    if (obj.constructor === Object)
+    // if (obj.constructor === Object)
         if (Object.keys(obj).length === 0) {
             return true;
         } else {
